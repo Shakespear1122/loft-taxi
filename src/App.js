@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import LoginPage from './components/authPage';
+import TaxiProfile from './components/profile';
+import TaxiMap from './components/map';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [currentPage, setCurrentPage] = useState('login');
+  
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setCurrentPage('map');
+  };
+
+  const handleRegistr = (e) => {
+    e.preventDefault();
+    setCurrentPage('map');
+  };
+
+  const handleMapClick = e => {
+    setCurrentPage('map');
+  };
+
+  const handleprofileClick = e => {
+    setCurrentPage('profile');
+  };
+
+  const handleLogout = e => {
+    setCurrentPage('login');
+  };
+
+  if (currentPage === 'login') { 
+    return <LoginPage handleLogin={handleLogin} handleRegistr={handleRegistr} />
+  } 
+  if (currentPage === 'map') return (
+    <TaxiMap
+      handleMapClick={handleMapClick}
+      handleprofileClick={handleprofileClick}
+      handleLogout={handleLogout}
+    />
+  )
+  if (currentPage === 'profile') return (
+    <TaxiProfile 
+      handleMapClick={handleMapClick}
+      handleprofileClick={handleprofileClick}
+      handleLogout={handleLogout}
+    />
+  )
 }
 
 export default App;
