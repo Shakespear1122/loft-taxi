@@ -9,7 +9,7 @@ function LoginPage({ handleLogin, handleRegistr }) {
             return  <div className='form-container'>
                 <h1>Войти</h1>
                 <p>Новый пользователь? <a href='#' onClick={() => setIsNotRegistred(true)}>Зарегистрируйтесь</a></p>
-                <form className='login-form' onSubmit={handleLogin}>
+                <form name='map' className='login-form' onSubmit={handleLogin}>
                     <TextInput 
                         labeltext=''
                         inputType='text'
@@ -34,7 +34,7 @@ function LoginPage({ handleLogin, handleRegistr }) {
         <div className='form-container'>
             <h1>Регистрация</h1>
             <p>Уже есть аккаунт? <a href='#' onClick={() => setIsNotRegistred(false)}>Войти</a></p>
-            <form className='reg-form' onSubmit={handleRegistr}>
+            <form name='map' className='reg-form' onSubmit={handleRegistr}>
                 <TextInput 
                     labeltext=''
                     inputType='text'
