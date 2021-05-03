@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import TextInput from './common/textInput';
 import Button from './common/button';
+import PropTypes from 'prop-types';
 
-function LoginPage({ handleLogin, handleRegistr }) {
+function AuthPage({ goToPage }) {
     const [isNotRegistred, setIsNotRegistred] = useState(false)
-
+    const handlePage = (page) => {
+        goToPage(page)
+    }
         if (!isNotRegistred)  {
             return  <div className='form-container'>
                 <h1>Войти</h1>
                 <p>Новый пользователь? <a href='#' onClick={() => setIsNotRegistred(true)}>Зарегистрируйтесь</a></p>
-                <form name='map' className='login-form' onSubmit={handleLogin}>
+                <form  className='login-form' onSubmit={() => handlePage('map')}>
                     <TextInput 
                         labeltext=''
                         inputType='text'
                         placeholder='Имя пользователя'
                         inputText=''
                         isLabel={false}
-                        required='required'
+                        required={true}
                     />
                     <TextInput 
                         labeltext=''
@@ -24,7 +27,7 @@ function LoginPage({ handleLogin, handleRegistr }) {
                         placeholder='Пароль'
                         inputText=''
                         isLabel={false}
-                        required='required'
+                        required={true}
                     />
                     <Button type='submit'>Войти</Button>
                 </form>
@@ -34,14 +37,14 @@ function LoginPage({ handleLogin, handleRegistr }) {
         <div className='form-container'>
             <h1>Регистрация</h1>
             <p>Уже есть аккаунт? <a href='#' onClick={() => setIsNotRegistred(false)}>Войти</a></p>
-            <form name='map' className='reg-form' onSubmit={handleRegistr}>
+            <form  className='reg-form' onSubmit={() => handlePage('map')}>
                 <TextInput 
                     labeltext=''
                     inputType='text'
                     placeholder='Адрес электронной почты'
                     inputText=''
                     isLabel={false}
-                    required='required'
+                    required={true}
                 />
                 <TextInput 
                     labeltext=''
@@ -49,7 +52,7 @@ function LoginPage({ handleLogin, handleRegistr }) {
                     placeholder='Имя'
                     inputText=''
                     isLabel={false}
-                    required='required'
+                    required={true}
                 />
                 <TextInput 
                     labeltext=''
@@ -57,7 +60,7 @@ function LoginPage({ handleLogin, handleRegistr }) {
                     placeholder='Фамилия'
                     inputText=''
                     isLabel={false}
-                    required='required'
+                    required={true}
                 />
                 <TextInput 
                     labeltext=''
@@ -65,11 +68,15 @@ function LoginPage({ handleLogin, handleRegistr }) {
                     placeholder='Пароль'
                     inputText=''
                     isLabel={false}
-                    required='required'
+                    required={true}
                 />
                 <Button type='submit'>Зарегистрироваться</Button>
             </form>
         </div> )
 };
 
-export default LoginPage;
+AuthPage.protoTypes = {
+    goToPage: PropTypes.func,
+};
+
+export default AuthPage;

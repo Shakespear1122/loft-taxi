@@ -1,17 +1,18 @@
 import React from 'react';
 import Header from './common/header';
+import PropTypes from 'prop-types';
 
-function TaxiProfile({ handleMapClick, handleprofileClick, handleLogout }) {
+function TaxiProfile({ goToPage }) {
     return (
         <div>
-            <Header 
-                handleMapClick={handleMapClick}
-                handleprofileClick={handleprofileClick}
-                handleLogout={handleLogout}
-            />
+            <Header goToPage={goToPage} />
             <div style={{textAlign: 'center', paddingTop: '40px'}}>Profile</div>
         </div>
     )
+};
+
+TaxiProfile.propTypes = {
+    goToPage: PropTypes.func,
 };
 
 export default TaxiProfile;

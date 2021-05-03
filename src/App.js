@@ -1,31 +1,22 @@
 import React, { useState } from 'react';
-import LoginPage from './components/authPage';
+import AuthPage from './components/authPage';
 import TaxiProfile from './components/profile';
 import TaxiMap from './components/map';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('login');
-  
-  const handlePageRedirect = (e) => {
-    e.preventDefault();
-    setCurrentPage(e.target.name);
+
+  const goToPage = (page, e) => {
+    setCurrentPage(page);
   };
   
   const pages = {
-    'login': <LoginPage 
-        handleLogin={handlePageRedirect} 
-        handleRegistr={handlePageRedirect} />,
-    'map': <TaxiMap
-        handleMapClick={handlePageRedirect}
-        handleprofileClick={handlePageRedirect}
-        handleLogout={handlePageRedirect} />,
-    'profile': <TaxiProfile 
-        handleMapClick={handlePageRedirect}
-        handleprofileClick={handlePageRedirect}
-        handleLogout={handlePageRedirect} />,
+    'login': <AuthPage goToPage={goToPage} />,
+    'map': <TaxiMap goToPage={goToPage} />,
+    'profile': <TaxiProfile goToPage={goToPage} />,
   };
 
-  return pages[currentPage];
+  return pages[currentPage]
 };
 
 export default App;
