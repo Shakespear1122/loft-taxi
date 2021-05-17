@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Login from './login';
+import Registr from './login';
 import { ContextApp } from '../../authContext';
-import {  render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    Login: () => ({}),
+    Registr: () => ({}),
   }));
-
+  
 it('Login is rendering without crash', () => {
     const login = (email,password) => {
     };
@@ -18,7 +18,7 @@ it('Login is rendering without crash', () => {
     const div = document.createElement('div');
     ReactDOM.render(
         <ContextApp.Provider value={login}>
-            <Login userInfo={userInfo} />
+            <Registr userInfo={userInfo} />
         </ContextApp.Provider>, div);
     ReactDOM.unmountComponentAtNode(div);
 });
@@ -32,7 +32,7 @@ it('Form is rendering', () => {
     };
     const { getByTestId } = render(
         <ContextApp.Provider value={login}>
-            <Login userInfo={userInfo} />
+            <Registr userInfo={userInfo} />
         </ContextApp.Provider>);
 
     expect(getByTestId('form')).toBeTruthy();

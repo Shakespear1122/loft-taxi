@@ -1,12 +1,13 @@
 import React from 'react';
-import AuthPage from './authPage';
+import TaxiMap from './map';
 import { shallow } from 'enzyme';
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    App: () => ({}),
+    TaxiMap: () => ({}),
   }));
 
 it('authPage render without crash', () => {
-    const wrapper = shallow(<AuthPage />)
+    const goToPageMock = jest.fn();
+    const wrapper = shallow(<TaxiMap goToPage={goToPageMock} />)
     expect(wrapper.exists);
 });

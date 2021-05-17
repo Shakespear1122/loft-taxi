@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { ContextApp } from '../../App';
+import { ContextApp } from '../../authContext';
 import { AppBar, Toolbar, Link, Button } from '@material-ui/core';
 import { Logo } from 'loft-taxi-mui-theme';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,9 +28,9 @@ function Header({ goToPage }) {
             <AppBar className={classes.root}>
                 <Toolbar>
                     <div className={classes.logo} ><Logo/></div>
-                    <Button style={{color: '#fff'}} href='#' onClick={() => handlePage('map')} >Карта</Button>
-                    <Button style={{color: '#fff'}} onClick={() => handlePage('profile')} >Профиль</Button>
-                    <Button style={{color: '#fff'}} href='#' onClick={() => logout()} >Выйти</Button>
+                    <Button data-testid="map" style={{color: '#fff'}} href='#' onClick={() => handlePage('map')} >Карта</Button>
+                    <Button data-testid="profile" style={{color: '#fff'}} onClick={() => handlePage('profile')} >Профиль</Button>
+                    <Button data-testid="exit-button" style={{color: '#fff'}} href='#' onClick={() => logout()} >Выйти</Button>
                 </Toolbar>
             </AppBar>
         </div>

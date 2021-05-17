@@ -12,7 +12,9 @@ function TaxiMap({ goToPage }) {
     useEffect(() => {
         const map = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11'
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 8,
+            center: [30.27,60]
         });
     })
     const mapStyle = {

@@ -6,7 +6,7 @@ function TaxiProfile({ goToPage }) {
     return (
         <div>
             <Header goToPage={goToPage} />
-            <div style={{textAlign: 'center', paddingTop: '40px'}}>Profile</div>
+            <div data-testid='profile-page' style={{textAlign: 'center', paddingTop: '40px'}}>Profile</div>
         </div>
     )
 };

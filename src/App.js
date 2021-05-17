@@ -1,30 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AuthPage from './components/authPage';
 import TaxiProfile from './components/profile';
 import TaxiMap from './components/map';
-
-export const ContextApp = React.createContext();
+import { ContextApp } from './authContext';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('login');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const login = (email, password) => {
-    setIsLoggedIn(true);
-    setCurrentPage('map');
-  };
-
-  const registr = (name, email, password) => {
-    console.log('success')
-  }
-
-  const logout = () => {
-    setIsLoggedIn(false);
-    setCurrentPage('login');
-  };
+  const [currentPage, setCurrentPage] = useState();
+  const { isLoggedIn } = useContext(ContextApp);
 
   const goToPage = (page) => {
-    setCurrentPage(page);
+      setCurrentPage(page);
   };  
   
   const pages = {
@@ -34,9 +19,7 @@ function App() {
   };
 
   return (
-    <ContextApp.Provider value={{login, registr, logout, isLoggedIn}}>
-      {pages[currentPage]}
-    </ContextApp.Provider>
+      isLoggedIn ? pages[currentPage] : pages['login']
     )
 };
 

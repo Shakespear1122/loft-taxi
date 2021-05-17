@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Container, Typography, FormControl, TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ContextApp } from '../../App';
+import { ContextApp } from '../../authContext';
 import PropTypes from 'prop-types';
 
 
@@ -85,12 +85,7 @@ function Registr({ setIsNotRegistred, handleChange, userInfo }) {
 }
 
 Registr.propTypes = {
-    userInfo: PropTypes.shape({
-        name: PropTypes.string,
-        password: PropTypes.string,
-    }).isRequired,
     setIsNotRegistred: PropTypes.func,
-    handleChange: PropTypes.func,
 }
 
 export default Registr;

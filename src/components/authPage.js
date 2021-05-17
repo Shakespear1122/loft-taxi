@@ -40,20 +40,9 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function AuthPage() {
+function AuthPage({ goToPage }) {
     const classes = useStyles();
     const [ isNotRegistred, setIsNotRegistred ] = useState(false)
-    const [ userInfo, setUserInfo ] = useState({});
-
-    const handleChange = (e) => {
-        const name = e.target.name;
-        setUserInfo(prev => {
-            return {
-                ...prev,
-                [name]: e.target.value,
-            }
-        })
-    };
 
     return (
          <div className={classes.authPage}>
@@ -64,14 +53,12 @@ function AuthPage() {
                 <Paper className={classes.paper} elevation={6}>
                     {!isNotRegistred ? 
                     <Login 
-                        handleChange={handleChange}
                         setIsNotRegistred={setIsNotRegistred}
-                        userInfo={userInfo}
+                        goToPage={goToPage}
                     /> : 
                     <Registr
-                        handleChange={handleChange}
                         setIsNotRegistred={setIsNotRegistred}
-                        userInfo={userInfo}
+                        goToPage={goToPage}
                     />}      
                 </Paper>
              </div>

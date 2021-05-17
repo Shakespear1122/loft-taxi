@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Container, Typography, FormControl, TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ContextApp } from '../../App';
+import { ContextApp } from '../../authContext';
 import PropTypes from 'prop-types';
 
 
@@ -38,26 +38,35 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function Login({ setIsNotRegistred, handleChange, userInfo }) {
+function Login({ setIsNotRegistred, goToPage }) {
+
     const classes = useStyles();
     const { login } = useContext(ContextApp);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        const password = e.target.password.value;
+        login(name, password);
+        goToPage('map');
+    }
     
     return (
         <Container >
             <Container className={classes.container}>
                 <Typography className={classes.h4} variant='h4'>Вход</Typography>
-                <form data-testid='form' className={classes.form} onSubmit={() => login(userInfo.name, userInfo.password)}>
+                <form data-testid='form' className={classes.form} onSubmit={(e) => handleSubmit(e)}>
                     <FormControl className={classes.margin}>
                         <TextField
+                            name='name'
                             label='Имя пользователя' 
-                            onChange={handleChange}
                             required={true}
                         />
                     </FormControl>
                     <FormControl className={classes.margin}>    
                         <TextField
+                            name='password'
                             label='Пароль' 
-                            onChange={handleChange}
                             required={true}
                         />
                         <Button className={classes.button} variant='contained' color='primary' type='submit'>Войти</Button>
@@ -74,12 +83,7 @@ function Login({ setIsNotRegistred, handleChange, userInfo }) {
 }
 
 Login.propTypes = {
-    userInfo: PropTypes.shape({
-        name: PropTypes.string,
-        password: PropTypes.string,
-    }).isRequired,
     setIsNotRegistred: PropTypes.func,
-    handleChange: PropTypes.func,
 }
 
 export default Login;
