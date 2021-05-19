@@ -54,7 +54,7 @@ function Login({ setIsNotRegistred, goToPage }) {
     return (
         <Container >
             <Container className={classes.container}>
-                <Typography className={classes.h4} variant='h4'>Вход</Typography>
+                <Typography data-testid='login-header' className={classes.h4} variant='h4'>Вход</Typography>
                 <form data-testid='form' className={classes.form} onSubmit={(e) => handleSubmit(e)}>
                     <FormControl className={classes.margin}>
                         <TextField

@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Login from './login';
 import { ContextApp } from '../../authContext';
-import {  render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
     Login: () => ({}),
@@ -15,12 +14,11 @@ it('Login is rendering without crash', () => {
         email: 'email',
         password: 'pass'
     };
-    const div = document.createElement('div');
-    ReactDOM.render(
+    render(
         <ContextApp.Provider value={login}>
             <Login userInfo={userInfo} />
-        </ContextApp.Provider>, div);
-    ReactDOM.unmountComponentAtNode(div);
+        </ContextApp.Provider>);
+    expect(screen.getByTestId('login-header')).toBeTruthy();
 });
 
 it('Form is rendering', () => {

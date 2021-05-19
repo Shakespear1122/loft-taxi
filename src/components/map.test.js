@@ -1,13 +1,18 @@
 import React from 'react';
 import TaxiMap from './map';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import { ContextApp } from '../authContext';
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    TaxiMap: () => ({}),
+jest.mock("mapbox-gl", () => ({
+    Map: jest.fn(() => ({ remove: () => {} })),
   }));
 
 it('authPage render without crash', () => {
     const goToPageMock = jest.fn();
-    const wrapper = shallow(<TaxiMap goToPage={goToPageMock} />)
-    expect(wrapper.exists);
+    const logout = jest.fn();
+    render(
+    <ContextApp.Provider value={{logout}}>
+        <TaxiMap goToPage={goToPageMock} />
+    </ContextApp.Provider>)
+    expect(screen.getByTestId('map-container')).toBeTruthy();
 });

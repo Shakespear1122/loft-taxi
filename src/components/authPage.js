@@ -45,7 +45,7 @@ function AuthPage({ goToPage }) {
     const [ isNotRegistred, setIsNotRegistred ] = useState(false)
 
     return (
-         <div className={classes.authPage}>
+         <div data-testid='auth-container' className={classes.authPage}>
              <div className={classes.logoContainer}>
                 <Logo />
              </div>

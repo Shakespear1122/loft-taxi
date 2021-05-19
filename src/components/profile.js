@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 function TaxiProfile({ goToPage }) {
     return (
-        <div>
+        <div data-testid='profile-container' >
             <Header goToPage={goToPage} />
             <div data-testid='profile-page' style={{textAlign: 'center', paddingTop: '40px'}}>Profile</div>
         </div>

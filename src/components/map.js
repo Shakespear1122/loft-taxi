@@ -27,7 +27,7 @@ function TaxiMap({ goToPage }) {
     }
 
     return (
-        <div>
+        <div data-testid='map-container' >
             <Header goToPage={goToPage} />
             <div ref={mapContainer} style={mapStyle}></div>
         </div>

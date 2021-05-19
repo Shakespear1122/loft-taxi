@@ -24,7 +24,7 @@ function Header({ goToPage }) {
     };
 
     return (
-        <div className={classes.root}>
+        <div data-testid='header-container' className={classes.root}>
             <AppBar className={classes.root}>
                 <Toolbar>
                     <div className={classes.logo} ><Logo/></div>

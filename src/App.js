@@ -19,7 +19,9 @@ function App() {
   };
 
   return (
-      isLoggedIn ? pages[currentPage] : pages['login']
+    <div data-testid='home-container' >
+      {isLoggedIn ? pages[currentPage] : pages['login']}
+    </div>  
     )
 };
 

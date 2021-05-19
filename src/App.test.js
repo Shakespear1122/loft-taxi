@@ -1,6 +1,6 @@
 import React from 'react';
 import App from './App';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { ContextApp } from './authContext';
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
@@ -10,10 +10,10 @@ jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
 it('App is rendering without crash', () => {
     const login = jest.fn();
     const isLoggedIn = false;
-    const wrapper = shallow(
+    render(
         <ContextApp.Provider value={{login, isLoggedIn}}>
             <App />
         </ContextApp.Provider>
     );
-    expect(wrapper.exists);
+    expect(screen.getByTestId('home-container')).toBeTruthy();
 });
