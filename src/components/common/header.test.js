@@ -1,21 +1,21 @@
-import React from 'react';
-import Header from './header';
-import { ContextApp } from '../../authContext';
-import { render, screen } from '@testing-library/react';
+import React from "react";
+import Header from "./header";
+import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import createAppStore from "../../store";
+import { BrowserRouter } from "react-router-dom";
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    Header: () => ({}),
-  }));
+const store = createAppStore();
 
-it('header is rendering without crash', () => {
-    const goToPageMock = jest.fn();
-    const mockLogin = jest.fn();
-    
-    render(
-        <ContextApp.Provider value={mockLogin}>
-            <Header goToPage={goToPageMock} />
-        </ContextApp.Provider>
-        );
-    expect(screen.getByTestId('header-container')).toBeTruthy();
+jest.mock("mapbox-gl", () => ({}));
 
+it("header is rendering without crash", () => {
+  render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>
+    </Provider>
+  );
+  expect(screen.getByTestId("header-container")).toBeTruthy();
 });

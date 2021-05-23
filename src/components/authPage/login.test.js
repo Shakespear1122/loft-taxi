@@ -1,37 +1,33 @@
-import React from 'react';
-import Login from './login';
-import { ContextApp } from '../../authContext';
-import { render, screen } from '@testing-library/react';
+import React from "react";
+import Login from "./login";
+import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import createAppStore from "../../store";
+import { BrowserRouter } from "react-router-dom";
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    Login: () => ({}),
-  }));
+const store = createAppStore();
 
-it('Login is rendering without crash', () => {
-    const login = (email,password) => {
-    };
-    const userInfo = {
-        email: 'email',
-        password: 'pass'
-    };
-    render(
-        <ContextApp.Provider value={login}>
-            <Login userInfo={userInfo} />
-        </ContextApp.Provider>);
-    expect(screen.getByTestId('login-header')).toBeTruthy();
+jest.mock("mapbox-gl", () => ({}));
+
+it("Login is rendering without crash", () => {
+  render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    </Provider>
+  );
+  expect(screen.getByTestId("login-header")).toBeTruthy();
 });
 
-it('Form is rendering', () => {
-    const login = (email,password) => {
-    };
-    const userInfo = {
-        email: 'email',
-        password: 'pass'
-    };
-    const { getByTestId } = render(
-        <ContextApp.Provider value={login}>
-            <Login userInfo={userInfo} />
-        </ContextApp.Provider>);
+it("Form is rendering", () => {
+  const { getByTestId } = render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    </Provider>
+  );
 
-    expect(getByTestId('form')).toBeTruthy();
+  expect(getByTestId("form")).toBeTruthy();
 });

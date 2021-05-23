@@ -1,28 +1,24 @@
-import React, { useContext, useState } from 'react';
-import AuthPage from './components/authPage';
-import TaxiProfile from './components/profile';
-import TaxiMap from './components/map';
-import { ContextApp } from './authContext';
+import React from "react";
+import AuthPage from "./components/authPage";
+import TaxiProfile from "./components/profile";
+import TaxiMap from "./components/map";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { PrivateRoute } from "./privateRoute";
+import { connect } from "react-redux";
 
-function App() {
-  const [currentPage, setCurrentPage] = useState();
-  const { isLoggedIn } = useContext(ContextApp);
-
-  const goToPage = (page) => {
-      setCurrentPage(page);
-  };  
-  
-  const pages = {
-    'login': <AuthPage goToPage={goToPage} />,
-    'map': <TaxiMap goToPage={goToPage} />,
-    'profile': <TaxiProfile goToPage={goToPage} />,
-  };
-
+function App(props) {
   return (
-    <div data-testid='home-container' >
-      {isLoggedIn ? pages[currentPage] : pages['login']}
-    </div>  
-    )
-};
+    <div data-testid='home-container'>
+      <Switch>
+        <PrivateRoute path='/order/map' isLoggedIn={props.isLoggedIn} component={TaxiMap} />
+        <PrivateRoute path='/order/profile' isLoggedIn={props.isLoggedIn} component={TaxiProfile} />
+        <Route path='/auth' component={AuthPage} />
+        <Redirect to='/auth' />
+      </Switch>
+    </div>
+  );
+}
 
-export default App;
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps)(App);

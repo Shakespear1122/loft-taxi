@@ -1,17 +1,25 @@
-import React from 'react';
-import AuthPage from './authPage';
-import { render, screen } from '@testing-library/react';
-import { ContextApp } from '../authContext';
+import React from "react";
+import AuthPage from "./authPage";
+import { render, screen } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
+import { Provider } from "react-redux";
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-    App: () => ({}),
-  }));
+jest.mock("mapbox-gl", () => ({}));
 
-it('authPage render without crash', () => {
-  const login = jest.fn();
-    render(
-    <ContextApp.Provider value={{login}} >
-      <AuthPage />
-    </ContextApp.Provider>);
-    expect(screen.getByTestId('auth-container')).toBeTruthy();
+it("opens the corresponding page", () => {
+  const mockStore = {
+    getState: () => ({ auth: { isLoggedIn: true } }),
+    subscribe: () => {},
+    dispatch: () => {},
+  };
+  const history = createMemoryHistory();
+
+  const { container, getByText } = render(
+    <Router history={history}>
+      <Provider store={mockStore}>
+        <AuthPage />
+      </Provider>
+    </Router>
+  );
 });

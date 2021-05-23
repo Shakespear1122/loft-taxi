@@ -1,15 +1,19 @@
-import React from 'react';
-import TaxiProfile from './profile';
-import { render, screen } from '@testing-library/react';
-import { ContextApp } from '../authContext';
-import { ExpansionPanelActions } from '@material-ui/core';
+import React from "react";
+import TaxiProfile from "./profile";
+import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import createAppStore from "../store";
+import { BrowserRouter } from "react-router-dom";
 
-it('authPage render without crash', () => {
-    const goToPageMock = jest.fn();
-    const logout = jest.fn();
-    render(
-        <ContextApp.Provider value={{logout}} >
-            <TaxiProfile goToPage={goToPageMock} />)
-        </ContextApp.Provider>)
-    expect(screen.getByTestId('profile-container')).toBeTruthy();
+const store = createAppStore();
+
+it("authPage render without crash", () => {
+  render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <TaxiProfile />
+      </BrowserRouter>
+    </Provider>
+  );
+  expect(screen.getByTestId("profile-container")).toBeTruthy();
 });
