@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Container, Paper, Typography, FormControl, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { MCIcon, Logo } from "loft-taxi-mui-theme";
+import { connect } from "react-redux";
+import { postCardInfo } from "../modules/actions";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -47,11 +49,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TaxiProfile() {
+function TaxiProfile(props) {
   const classes = useStyles();
   const [cardNumber, setCardNumber] = useState();
   const [cardDate, setCardDate] = useState();
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const cardNumber = e.target.cardNumber.value;
+    const cvc = e.target.cvc.value;
+    const date = e.target.date.value;
+    props.postCardInfo({
+      cardNumber: cardNumber,
+      expiryDate: date,
+      CardName: name,
+      cvc: cvc,
+      token: props.authReducer.token,
+    });
+  };
   return (
     <div data-testid='profile-container'>
       <Header />
@@ -61,7 +77,7 @@ function TaxiProfile() {
             <Typography variant='h4'>Профиль</Typography>
             <Typography>Введите платежные данные</Typography>
             <Container className={classes.profileBox}>
-              <form>
+              <form id='profile-form' onSubmit={(e) => handleSubmit(e)}>
                 <FormControl className={classes.margin}>
                   <TextField name='name' label='Имя владельца' required={true} />
                 </FormControl>
@@ -77,9 +93,8 @@ function TaxiProfile() {
                   <FormControl className={classes.margin}>
                     <TextField
                       name='date'
-                      label='MM/YY'
                       required={true}
-                      type='date'
+                      label='Date'
                       onChange={(e) => setCardDate(e.target.value)}
                     />
                   </FormControl>
@@ -103,7 +118,7 @@ function TaxiProfile() {
                 </div>
               </Paper>
             </Container>
-            <Button variant='contained' color='primary' type='submit'>
+            <Button form='profile-form' variant='contained' color='primary' type='submit'>
               Сохранить
             </Button>
           </Paper>
@@ -117,4 +132,7 @@ TaxiProfile.propTypes = {
   goToPage: PropTypes.func,
 };
 
-export default TaxiProfile;
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = { postCardInfo };
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaxiProfile);

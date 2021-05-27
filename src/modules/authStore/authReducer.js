@@ -11,13 +11,6 @@ import {
 const savedData = JSON.parse(localStorage.getItem("loft-taxi-state"));
 
 const initialState = {
-  isLoggedIn: false,
-  isLoading: false,
-  email: null,
-  password: null,
-  token: null,
-  name: null,
-  error: null,
   ...savedData,
 };
 
