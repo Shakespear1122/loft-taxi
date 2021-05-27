@@ -1,82 +1,73 @@
-import React, { useState } from 'react';
-import TextInput from './common/textInput';
-import Button from './common/button';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import { Logo } from "loft-taxi-mui-theme";
+import { Paper } from "@material-ui/core";
+import Login from "../components/authPage/login";
+import Registr from "../components/authPage/registr";
+import backgroundImage from "../assets/imgs/authBackground.jpg";
+import { Redirect, Route, Switch } from "react-router";
+import { connect } from "react-redux";
 
-function AuthPage({ goToPage }) {
-    const [isNotRegistred, setIsNotRegistred] = useState(false)
-    const handlePage = (page) => {
-        goToPage(page)
-    }
-        if (!isNotRegistred)  {
-            return  <div className='form-container'>
-                <h1>Войти</h1>
-                <p>Новый пользователь? <a href='#' onClick={() => setIsNotRegistred(true)}>Зарегистрируйтесь</a></p>
-                <form  className='login-form' onSubmit={() => handlePage('map')}>
-                    <TextInput 
-                        labeltext=''
-                        inputType='text'
-                        placeholder='Имя пользователя'
-                        inputText=''
-                        isLabel={false}
-                        required={true}
-                    />
-                    <TextInput 
-                        labeltext=''
-                        inputType='text'
-                        placeholder='Пароль'
-                        inputText=''
-                        isLabel={false}
-                        required={true}
-                    />
-                    <Button type='submit'>Войти</Button>
-                </form>
-            </div>
-        } 
-        return (
-        <div className='form-container'>
-            <h1>Регистрация</h1>
-            <p>Уже есть аккаунт? <a href='#' onClick={() => setIsNotRegistred(false)}>Войти</a></p>
-            <form  className='reg-form' onSubmit={() => handlePage('map')}>
-                <TextInput 
-                    labeltext=''
-                    inputType='text'
-                    placeholder='Адрес электронной почты'
-                    inputText=''
-                    isLabel={false}
-                    required={true}
-                />
-                <TextInput 
-                    labeltext=''
-                    inputType='text'
-                    placeholder='Имя'
-                    inputText=''
-                    isLabel={false}
-                    required={true}
-                />
-                <TextInput 
-                    labeltext=''
-                    inputType='text'
-                    placeholder='Фамилия'
-                    inputText=''
-                    isLabel={false}
-                    required={true}
-                />
-                <TextInput 
-                    labeltext=''
-                    inputType='text'
-                    placeholder='Пароль'
-                    inputText=''
-                    isLabel={false}
-                    required={true}
-                />
-                <Button type='submit'>Зарегистрироваться</Button>
-            </form>
-        </div> )
-};
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    maxWidth: "520px",
+    margin: "0 auto",
+    borderRadius: "20px",
+    padding: "60px 0",
+  },
+  authPage: {
+    display: "flex",
+    flexDirection: "row",
+    height: "100vh",
+  },
+  logoContainer: {
+    width: "33.33%",
+    backgroundColor: "#000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  formContainer: {
+    width: "66.67%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundImage: `url(${backgroundImage})`,
+  },
+}));
+
+function AuthPage(props) {
+  const classes = useStyles();
+  
+  if (props.isLoggedIn) {
+    return <Redirect to='/order/map' />;
+  }
+  return (
+    <div data-testid='auth-container' className={classes.authPage}>
+      <div className={classes.logoContainer}>
+        <Logo />
+      </div>
+      <div className={classes.formContainer}>
+        <Paper className={classes.paper} elevation={6}>
+          <Switch>
+            <Route exact path='/auth' component={Login} />
+            <Route path={`${props.match.path}/registr`} component={Registr} />
+          </Switch>
+        </Paper>
+      </div>
+    </div>
+  );
+}
 
 AuthPage.protoTypes = {
-    goToPage: PropTypes.func,
+  goToPage: PropTypes.func,
 };
 
-export default AuthPage;
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps)(AuthPage);
