@@ -23,6 +23,7 @@ export function authReducer(state = initialState, action) {
         password: action.payload.password,
         isLoading: true,
         isLoggedIn: false,
+        error: null,
       };
     case postRegRequest.toString():
       return {

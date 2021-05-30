@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./common/header";
 import PropTypes from "prop-types";
 import { Container, Paper, Typography, FormControl, TextField, Button } from "@material-ui/core";
@@ -6,6 +6,10 @@ import { makeStyles } from "@material-ui/styles";
 import { MCIcon, Logo } from "loft-taxi-mui-theme";
 import { connect } from "react-redux";
 import { postCardInfo } from "../modules/actions";
+import NumberFormat from "react-number-format";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -18,10 +22,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: "20px",
+    margin: "40px 0",
   },
   profilePaper: {
-    padding: "50px 15px",
+    padding: "70px 20px",
   },
   flexBox: {
     display: "flex",
@@ -49,10 +53,75 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function CardNumber(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.formattedValue,
+          },
+        });
+      }}
+      format='#### #### #### ####'
+    />
+  );
+}
+
+function CardCvc(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      format='###'
+      placeholder='CVC'
+    />
+  );
+}
+
 function TaxiProfile(props) {
   const classes = useStyles();
-  const [cardNumber, setCardNumber] = useState();
-  const [cardDate, setCardDate] = useState();
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [cardDate, setCardDate] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("loft-taxi-state") &&
+      JSON.parse(localStorage.getItem("loft-taxi-state")).token
+    ) {
+      axios
+        .get(
+          `https://loft-taxi.glitch.me/card?token=${
+            JSON.parse(localStorage.getItem("loft-taxi-state")).token
+          }`
+        ) 
+        .then((response) => {
+          const cardData = response.data;
+          setCardNumber(cardData.cardNumber);
+          setCardName(cardData.cardName);
+          setCardCvc(cardData.cvc);
+          setCardDate(cardData.expiryDate);
+        });
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,11 +132,20 @@ function TaxiProfile(props) {
     props.postCardInfo({
       cardNumber: cardNumber,
       expiryDate: date,
-      CardName: name,
+      cardName: name,
       cvc: cvc,
       token: props.authReducer.token,
     });
   };
+
+  const dateChanger = () => {
+    let month = selectedDate.getMonth() + 1;
+    month = month < 9 ? "0" + month : month;
+    let year = selectedDate.getFullYear().toString().slice(2);
+    let date = month + "/" + year;
+    return date;
+  };
+
   return (
     <div data-testid='profile-container'>
       <Header />
@@ -79,27 +157,43 @@ function TaxiProfile(props) {
             <Container className={classes.profileBox}>
               <form id='profile-form' onSubmit={(e) => handleSubmit(e)}>
                 <FormControl className={classes.margin}>
-                  <TextField name='name' label='Имя владельца' required={true} />
+                  <TextField value={cardName} name='name' label='Имя владельца' required={true} />
                 </FormControl>
                 <FormControl className={classes.margin}>
                   <TextField
                     name='cardNumber'
                     label='Номер карты'
                     required={true}
+                    value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
+                    InputProps={{
+                      inputComponent: CardNumber,
+                    }}
                   />
                 </FormControl>
                 <div className={classes.flexBox}>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <FormControl className={classes.margin}>
+                      <DatePicker
+                        name='date'
+                        disableFuture
+                        openTo='year'
+                        format='MM/yy'
+                        views={["year", "month"]}
+                        value={selectedDate}
+                        onChange={setSelectedDate}
+                      />
+                    </FormControl>
+                  </MuiPickersUtilsProvider>
                   <FormControl className={classes.margin}>
                     <TextField
-                      name='date'
+                      name='cvc'
+                      value={cardCvc}
                       required={true}
-                      label='Date'
-                      onChange={(e) => setCardDate(e.target.value)}
+                      InputProps={{
+                        inputComponent: CardCvc,
+                      }}
                     />
-                  </FormControl>
-                  <FormControl className={classes.margin}>
-                    <TextField name='cvc' label='CVC' required={true} />
                   </FormControl>
                 </div>
               </form>
@@ -107,7 +201,7 @@ function TaxiProfile(props) {
               <Paper elevation={3} className={classes.card}>
                 <div className={classes.flexBox}>
                   <Logo></Logo>
-                  <p>{cardDate}</p>
+                  <p>{dateChanger()}</p>
                 </div>
 
                 <div className={classes.cardNumber}>
