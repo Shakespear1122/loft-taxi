@@ -100,7 +100,7 @@ function TaxiProfile(props) {
   const [cardName, setCardName] = useState("");
   const [cardDate, setCardDate] = useState("");
   const [cardCvc, setCardCvc] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
     if (
@@ -112,8 +112,9 @@ function TaxiProfile(props) {
           `https://loft-taxi.glitch.me/card?token=${
             JSON.parse(localStorage.getItem("loft-taxi-state")).token
           }`
-        ) 
+        )
         .then((response) => {
+          console.log(response);
           const cardData = response.data;
           setCardNumber(cardData.cardNumber);
           setCardName(cardData.cardName);
@@ -129,6 +130,7 @@ function TaxiProfile(props) {
     const cardNumber = e.target.cardNumber.value;
     const cvc = e.target.cvc.value;
     const date = e.target.date.value;
+    console.log(date);
     props.postCardInfo({
       cardNumber: cardNumber,
       expiryDate: date,
@@ -136,14 +138,6 @@ function TaxiProfile(props) {
       cvc: cvc,
       token: props.authReducer.token,
     });
-  };
-
-  const dateChanger = () => {
-    let month = selectedDate.getMonth() + 1;
-    month = month < 9 ? "0" + month : month;
-    let year = selectedDate.getFullYear().toString().slice(2);
-    let date = month + "/" + year;
-    return date;
   };
 
   return (
@@ -157,7 +151,13 @@ function TaxiProfile(props) {
             <Container className={classes.profileBox}>
               <form id='profile-form' onSubmit={(e) => handleSubmit(e)}>
                 <FormControl className={classes.margin}>
-                  <TextField value={cardName} name='name' label='Имя владельца' required={true} />
+                  <TextField
+                    onChange={(e) => setCardName(e.target.value)}
+                    value={cardName}
+                    name='name'
+                    label='Имя владельца'
+                    required={true}
+                  />
                 </FormControl>
                 <FormControl className={classes.margin}>
                   <TextField
@@ -190,6 +190,7 @@ function TaxiProfile(props) {
                       name='cvc'
                       value={cardCvc}
                       required={true}
+                      onChange={(e) => setCardCvc(e.target.value)}
                       InputProps={{
                         inputComponent: CardCvc,
                       }}
@@ -201,7 +202,7 @@ function TaxiProfile(props) {
               <Paper elevation={3} className={classes.card}>
                 <div className={classes.flexBox}>
                   <Logo></Logo>
-                  <p>{dateChanger()}</p>
+                  <p>{cardDate}</p>
                 </div>
 
                 <div className={classes.cardNumber}>
