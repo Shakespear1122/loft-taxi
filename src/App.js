@@ -10,8 +10,16 @@ function App(props) {
   return (
     <div data-testid='home-container'>
       <Switch>
-        <PrivateRoute path='/order/map' isLoggedIn={props.isLoggedIn} component={TaxiMap} />
-        <PrivateRoute path='/order/profile' isLoggedIn={props.isLoggedIn} component={TaxiProfile} />
+        <PrivateRoute
+          path='/order/map'
+          isLoggedIn={props.authReducer.isLoggedIn}
+          component={TaxiMap}
+        />
+        <PrivateRoute
+          path='/order/profile'
+          isLoggedIn={props.authReducer.isLoggedIn}
+          component={TaxiProfile}
+        />
         <Route path='/auth' component={AuthPage} />
         <Redirect to='/auth' />
       </Switch>

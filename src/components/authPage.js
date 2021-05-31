@@ -43,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 function AuthPage(props) {
   const classes = useStyles();
-  
-  if (props.isLoggedIn) {
+
+  if (props.authReducer.isLoggedIn) {
     return <Redirect to='/order/map' />;
   }
   return (

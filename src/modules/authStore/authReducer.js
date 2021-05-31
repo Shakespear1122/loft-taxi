@@ -6,22 +6,15 @@ import {
   logOut,
   postLoginFailure,
   postRegFailure,
-} from "./actions";
+} from "../actions";
 
 const savedData = JSON.parse(localStorage.getItem("loft-taxi-state"));
 
 const initialState = {
-  isLoggedIn: false,
-  isLoading: false,
-  email: null,
-  password: null,
-  token: null,
-  name: null,
-  error: null,
   ...savedData,
 };
 
-export default (state = initialState, action) => {
+export function authReducer(state = initialState, action) {
   switch (action.type) {
     case postLoginRequest.toString():
       return {
@@ -30,6 +23,7 @@ export default (state = initialState, action) => {
         password: action.payload.password,
         isLoading: true,
         isLoggedIn: false,
+        error: null,
       };
     case postRegRequest.toString():
       return {
@@ -84,4 +78,4 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-};
+}

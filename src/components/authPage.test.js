@@ -9,7 +9,7 @@ jest.mock("mapbox-gl", () => ({}));
 
 it("opens the corresponding page", () => {
   const mockStore = {
-    getState: () => ({ auth: { isLoggedIn: true } }),
+    getState: () => ({ authReducer: { isLoggedIn: true } }),
     subscribe: () => {},
     dispatch: () => {},
   };

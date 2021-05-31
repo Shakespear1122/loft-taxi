@@ -7,12 +7,12 @@ import {
   Button,
   LinearProgress,
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { postLoginRequest } from "../../modules/actions";
+
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -80,16 +80,22 @@ function Login(props) {
 
         <form data-testid='form' className={classes.form} onSubmit={(e) => handleSubmit(e)}>
           <FormControl className={classes.margin}>
-            <TextField name='email' label='Имя пользователя' required={true} />
+            <TextField
+              error={props.authReducer.error ? true : false}
+              name='email'
+              label={props.authReducer.error ? props.authReducer.error : "Имя пользователя"}
+              required={true}
+            />
           </FormControl>
           <FormControl className={classes.margin}>
-            <TextField name='password' label='Пароль' required={true} type='password' />
-            {props.isLoading && <LinearProgress color='primary' />}
-            {props.error && (
-              <div style={errorBox}>
-                <span>{props.error}</span>
-              </div>
-            )}
+            <TextField
+              error={props.authReducer.error ? true : false}
+              name='password'
+              label='Пароль'
+              required={true}
+              type='password'
+            />
+            {props.authReducer.isLoading && <LinearProgress color='primary' />}
             <Button
               disabled={props.isLoading && true}
               className={classes.button}
