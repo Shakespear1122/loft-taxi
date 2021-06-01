@@ -1,17 +1,20 @@
 import { createStore, compose, applyMiddleware } from "redux";
-import { fetchAuthMiddleware } from "./modules/authStore/fetchAuthMiddleware";
-import { fetchCardMiddleware } from "./modules/cardStore/fetchCardMiddleware";
 import { rootReducer } from "./modules/rootReducer";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./rootSaga";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const createAppStore = () => {
   const store = createStore(
     rootReducer,
     compose(
-      applyMiddleware(fetchAuthMiddleware),
-      applyMiddleware(fetchCardMiddleware),
+      applyMiddleware(sagaMiddleware),
       window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (noop) => noop
     )
   );
+  sagaMiddleware.run(rootSaga);
+
   return store;
 };
 

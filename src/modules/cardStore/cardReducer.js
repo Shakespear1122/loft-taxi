@@ -1,4 +1,4 @@
-import { postCardInfo, postCardSuccess, postCardFailure } from "../actions";
+import { postCardInfo, postCardSuccess, postCardFailure, setCardInfo } from "../actions";
 
 export function cardReducer(state = {}, action) {
   switch (action.type) {
@@ -6,7 +6,7 @@ export function cardReducer(state = {}, action) {
       return {
         ...state,
         cardNumber: action.payload.cardNumber,
-        cardDate: action.payload.cardDate,
+        expiryDate: action.payload.expiryDate,
         cardName: action.payload.cardName,
         cvc: action.payload.cvc,
         isLoading: true,
@@ -23,6 +23,14 @@ export function cardReducer(state = {}, action) {
         isLoading: false,
         success: action.payload.success,
         error: action.payload.error,
+      };
+    case setCardInfo.toString():
+      return {
+        ...state,
+        cardNumber: action.payload.cardNumber,
+        expiryDate: action.payload.expiryDate,
+        cardName: action.payload.cardName,
+        cvc: action.payload.cvc,
       };
     default:
       return state;

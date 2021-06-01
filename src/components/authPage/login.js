@@ -13,7 +13,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { postLoginRequest } from "../../modules/actions";
 
-
 const useStyles = makeStyles((theme) => ({
   margin: {
     width: "100%",
@@ -54,22 +53,6 @@ function Login(props) {
     const email = e.target.email.value;
     const password = e.target.password.value;
     props.postLoginRequest({ email: email, password: password });
-  };
-  const errorBox = {
-    color: "red",
-    top: "55px",
-    position: "absolute",
-    border: "1px solid red",
-    borderRadius: "5px",
-    padding: "5px",
-    width: "100%",
-    textAlign: "center",
-  };
-  const loadingContainer = {
-    zIndex: "10000",
-    backgroundColor: "black",
-    opacity: "0.8",
-    position: "absolute",
   };
   return (
     <Container>

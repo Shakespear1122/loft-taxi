@@ -5,7 +5,7 @@ import { Container, Paper, Typography, FormControl, TextField, Button } from "@m
 import { makeStyles } from "@material-ui/styles";
 import { MCIcon, Logo } from "loft-taxi-mui-theme";
 import { connect } from "react-redux";
-import { postCardInfo } from "../modules/actions";
+import { postCardInfo, setCardInfo } from "../modules/actions";
 import NumberFormat from "react-number-format";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -96,32 +96,11 @@ function CardCvc(props) {
 
 function TaxiProfile(props) {
   const classes = useStyles();
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardName, setCardName] = useState("");
-  const [cardDate, setCardDate] = useState("");
-  const [cardCvc, setCardCvc] = useState("");
+  const [cardNumber, setCardNumber] = useState();
+  const [cardName, setCardName] = useState();
+  const [cardDate, setCardDate] = useState();
+  const [cardCvc, setCardCvc] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  useEffect(() => {
-    if (
-      localStorage.getItem("loft-taxi-state") &&
-      JSON.parse(localStorage.getItem("loft-taxi-state")).token
-    ) {
-      axios
-        .get(
-          `https://loft-taxi.glitch.me/card?token=${
-            JSON.parse(localStorage.getItem("loft-taxi-state")).token
-          }`
-        ) 
-        .then((response) => {
-          const cardData = response.data;
-          setCardNumber(cardData.cardNumber);
-          setCardName(cardData.cardName);
-          setCardCvc(cardData.cvc);
-          setCardDate(cardData.expiryDate);
-        });
-    }
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -138,14 +117,6 @@ function TaxiProfile(props) {
     });
   };
 
-  const dateChanger = () => {
-    let month = selectedDate.getMonth() + 1;
-    month = month < 9 ? "0" + month : month;
-    let year = selectedDate.getFullYear().toString().slice(2);
-    let date = month + "/" + year;
-    return date;
-  };
-
   return (
     <div data-testid='profile-container'>
       <Header />
@@ -157,7 +128,13 @@ function TaxiProfile(props) {
             <Container className={classes.profileBox}>
               <form id='profile-form' onSubmit={(e) => handleSubmit(e)}>
                 <FormControl className={classes.margin}>
-                  <TextField value={cardName} name='name' label='Имя владельца' required={true} />
+                  <TextField
+                    onChange={(e) => setCardName(e.target.value)}
+                    value={cardName}
+                    name='name'
+                    label='Имя владельца'
+                    required={true}
+                  />
                 </FormControl>
                 <FormControl className={classes.margin}>
                   <TextField
@@ -187,6 +164,7 @@ function TaxiProfile(props) {
                   </MuiPickersUtilsProvider>
                   <FormControl className={classes.margin}>
                     <TextField
+                      type='password'
                       name='cvc'
                       value={cardCvc}
                       required={true}
@@ -201,11 +179,11 @@ function TaxiProfile(props) {
               <Paper elevation={3} className={classes.card}>
                 <div className={classes.flexBox}>
                   <Logo></Logo>
-                  <p>{dateChanger()}</p>
+                  <p>{props.cardReducer.expiryDate}</p>
                 </div>
 
                 <div className={classes.cardNumber}>
-                  <p style={{ margin: "0" }}>{cardNumber}</p>
+                  <p style={{ margin: "0" }}>{props.cardReducer.cardNumber}</p>
                 </div>
                 <div className={classes.mcContaner}>
                   <MCIcon className={classes.MCIcon} />
@@ -227,6 +205,6 @@ TaxiProfile.propTypes = {
 };
 
 const mapStateToProps = (state) => state;
-const mapDispatchToProps = { postCardInfo };
+const mapDispatchToProps = { postCardInfo, setCardInfo };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaxiProfile);
