@@ -96,18 +96,20 @@ function CardCvc(props) {
 
 function TaxiProfile(props) {
   const classes = useStyles();
+
   const [cardNumber, setCardNumber] = useState();
   const [cardName, setCardName] = useState();
   const [cardDate, setCardDate] = useState();
   const [cardCvc, setCardCvc] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const cardNumber = e.target.cardNumber.value;
     const cvc = e.target.cvc.value;
     const date = e.target.date.value;
+    console.log(date);
     props.postCardInfo({
       cardNumber: cardNumber,
       expiryDate: date,
@@ -168,6 +170,7 @@ function TaxiProfile(props) {
                       name='cvc'
                       value={cardCvc}
                       required={true}
+                      onChange={(e) => setCardCvc(e.target.value)}
                       InputProps={{
                         inputComponent: CardCvc,
                       }}
