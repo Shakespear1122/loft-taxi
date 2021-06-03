@@ -56,6 +56,7 @@ export function authReducer(state = initialState, action) {
       };
     case logOut.toString():
       localStorage.removeItem("loft-taxi-state");
+      localStorage.removeItem("cardData");
       return {
         ...state,
         isLoggedIn: false,
